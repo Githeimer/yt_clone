@@ -23,7 +23,7 @@ To get a local copy up and running follow these simple steps:
 1. Clone the repo
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/Githeimer/yt_clone.git
    ```
 
 2. Install dependencies
@@ -34,11 +34,7 @@ To get a local copy up and running follow these simple steps:
 
 3. Run the application
    ```bash
-   npm start
+   npm run dev
    ```
-
-## License
-
-This project is licensed under the MIT License.
 
 ---
