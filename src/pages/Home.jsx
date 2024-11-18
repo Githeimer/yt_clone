@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
+import Sidebar from "../Components/Sidebar.jsx";
 
 const Home = () => {
   return (
     <div>
-      <Navbar></Navbar>
-      <h1>Home</h1>
+      <Navbar />
+      <Sidebar />
     </div>
   );
 };
