@@ -7,13 +7,14 @@ import { FaMicrophone } from "react-icons/fa";
 import { RiVideoAddLine } from "react-icons/ri";
 import { BsBell } from "react-icons/bs";
 
-const Navbar = () => {
+const Navbar = ({ visibilityToggle }) => {
   return (
-    <div className="flex justify-between px-14 h-14 items-center bg-[#141313] opacity-95 sticky">
+    <div className=" flex justify-between px-14 h-14 items-center bg-[#141313] opacity-95 sticky">
       <div className="flex gap-8 items-center text-2xl">
-        <div>
+        <button onClick={visibilityToggle}>
           <GiHamburgerMenu />
-        </div>
+        </button>
+
         <div className="flex flex-row gap-2 items-center justify-center">
           <FaYoutube className="text-3xl text-red-600" />
           <span className="text-xl ">Youtube</span>
