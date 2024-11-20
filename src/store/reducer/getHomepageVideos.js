@@ -22,6 +22,6 @@ export const getHomePageVideos = createAsyncThunk(
 
     const parsedData = await parseData(items);
 
-    const newres = parsedData;
+    console.log(parsedData);
   }
 );
