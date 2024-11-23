@@ -8,21 +8,20 @@ const Home = () => {
   const [visible, setVisible] = useState(true);
 
   const visibilityToggle = () => {
-    if (visible) {
-      setVisible(false);
-    } else {
-      setVisible(true);
-    }
+    setVisible((prev) => !prev);
   };
 
   const dispatch = useAppDispatch();
-  const videos = useAppSelector((state) => {
-    state.youtubeApp.videos;
-  });
+  const videos = useAppSelector((state) => state.youtubeApp.videos);
 
   useEffect(() => {
+    console.log("Dispatching getHomePageVideos...");
     dispatch(getHomePageVideos(false));
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log("Videos in state:", videos);
+  }, [videos]);
 
   return (
     <div>

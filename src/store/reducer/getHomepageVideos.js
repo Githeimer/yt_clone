@@ -11,17 +11,31 @@ export const getHomePageVideos = createAsyncThunk(
   async (isNext, { getState }) => {
     const {
       youtubeApp: { nextPageToken: nextPageTokenFromState },
-      video,
+      video = [],
     } = getState();
 
-    const resposnse =
-      await axios.get(`${API_URL}/search?maxResults=20&q="freeCodeCamp.org
-"&key=${API_KEY}&part=snippet&type=video`);
+    const nextPageTokenQuery =
+      isNext && nextPageTokenFromState
+        ? `&pageToken=${nextPageTokenFromState}`
+        : "";
 
-    const items = resposnse.data.items;
+    try {
+      const response = await axios.get(
+        `${API_URL}/search?maxResults=20&q=freeCodeCamp.org&key=${API_KEY}&part=snippet&type=video${nextPageTokenQuery}`
+      );
 
-    const parsedData = await parseData(items);
+      const items = response.data.items;
 
-    console.log(parsedData);
+      // Parse the video data
+      const parsedData = await parseData(items);
+
+      return {
+        parsedData: [...video, ...parsedData], // Spread the existing videos with the new ones
+        nextPageToken: response.data.nextPageToken || null,
+      };
+    } catch (error) {
+      console.error("API Error:", error.response?.data || error.message);
+      throw error;
+    }
   }
 );
