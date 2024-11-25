@@ -2,23 +2,29 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar.jsx";
 import Spinner from "../Components/Spinner.jsx";
-import Card from "../Components/Card.jsx";
+import SearchCard from "../Components/SearchCard.jsx";
 
 import { useAppDispatch, useAppSelector } from "../hooks/useApp.js";
 import { getHomePageVideos } from "../store/reducer/getHomepageVideos.js";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useNavigate } from "react-router-dom";
 import { clearVideos } from "../features/youtube/youtubeSlice.js";
+import { getSearchPageVideos } from "../store/reducer/getSearchPageVideos.js";
 
-const Home = () => {
+const Search = () => {
   const [visible, setVisible] = useState(true);
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const videos = useAppSelector((state) => state.youtubeApp.videos);
+  const searchTerm = useAppSelector((state) => state.youtubeApp.searchTerm);
 
   useEffect(() => {
     dispatch(clearVideos());
-    dispatch(getHomePageVideos(false));
-  }, [dispatch]);
+
+    if (searchTerm === "") navigate("/");
+    else dispatch(getSearchPageVideos(false));
+  }, [dispatch, navigate, searchTerm]);
 
   const visibilityToggle = () => {
     setVisible((prev) => !prev);
@@ -34,14 +40,14 @@ const Home = () => {
         {videos.length ? (
           <InfiniteScroll
             dataLength={videos.length}
-            next={() => dispatch(getHomePageVideos(true))}
+            next={() => dispatch(getSearchPageVideos(true))}
             hasMore={videos.length < 500}
             loader={<Spinner />}
             height={650}
           >
-            <div className="grid gap-y-14 gap-x-5 grid-cols-4 p-8">
+            <div className="grid gap-y-6 gap-x-5 grid-cols-1 p-8">
               {videos.map((item) => {
-                return <Card data={item} key={item.videoId} />;
+                return <SearchCard data={item} key={item.videoId} />;
               })}
             </div>
           </InfiniteScroll>
@@ -53,4 +59,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Search;

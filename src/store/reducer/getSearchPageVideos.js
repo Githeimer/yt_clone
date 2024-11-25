@@ -4,15 +4,15 @@ import { parseData } from "../../utils/parseData.js";
 
 const API_KEY = import.meta.env.VITE_REACT_APP_YOUTUBE_DATA_API_KEY;
 
-export const getHomePageVideos = createAsyncThunk(
-  "youtube/App/homePageVideos",
+export const getSearchPageVideos = createAsyncThunk(
+  "youtube/App/searchPageVideos",
   async (isNext, { getState }) => {
     const {
-      youtubeApp: { nextPageToken: nextPageTokenFromState, videos },
+      youtubeApp: { nextPageToken: nextPageTokenFromState, videos, searchTerm },
     } = getState();
 
     const response = await axios.get(
-      `https://youtube.googleapis.com/youtube/v3/search?maxResults=20&q="freecodecamp.org"&key=${API_KEY}&part=snippet&type=video&${
+      `https://youtube.googleapis.com/youtube/v3/search?q="${searchTerm}"&key=${API_KEY}&part=snippet&type=video&${
         isNext ? `pageToken=${nextPageTokenFromState}` : ""
       }`
     );
