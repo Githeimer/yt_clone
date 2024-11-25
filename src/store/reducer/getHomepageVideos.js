@@ -4,38 +4,27 @@ import { parseData } from "../../utils/parseData.js";
 
 const API_KEY = import.meta.env.VITE_REACT_APP_YOUTUBE_DATA_API_KEY;
 
-const API_URL = "https://youtube.googleapis.com/youtube/v3";
-
 export const getHomePageVideos = createAsyncThunk(
-  "youtube/App/homePageVideos",
+  "youtube/App/searchPageVideos",
   async (isNext, { getState }) => {
     const {
-      youtubeApp: { nextPageToken: nextPageTokenFromState },
-      video = [],
+      youtubeApp: { nextPageToken: nextPageTokenFromState, videos },
     } = getState();
 
-    const nextPageTokenQuery =
-      isNext && nextPageTokenFromState
-        ? `&pageToken=${nextPageTokenFromState}`
-        : "";
+    const response = await axios.get(
+      `https://youtube.googleapis.com/youtube/v3/search?maxResults=20&q="freecodecamp.org"&key=${API_KEY}&part=snippet&type=video&${
+        isNext ? `pageToken=${nextPageTokenFromState}` : ""
+      }`
+    );
 
-    try {
-      const response = await axios.get(
-        `${API_URL}/search?maxResults=20&q=freeCodeCamp.org&key=${API_KEY}&part=snippet&type=video${nextPageTokenQuery}`
-      );
+    const items = response.data.items;
+    const parsedData = await parseData(items);
 
-      const items = response.data.items;
+    console.log("Parsed data:", parsedData);
 
-      // Parse the video data
-      const parsedData = await parseData(items);
-
-      return {
-        parsedData: [...video, ...parsedData], // Spread the existing videos with the new ones
-        nextPageToken: response.data.nextPageToken || null,
-      };
-    } catch (error) {
-      console.error("API Error:", error.response?.data || error.message);
-      throw error;
-    }
+    return {
+      parsedData: [...videos, ...parsedData],
+      nextPageToken: nextPageTokenFromState,
+    };
   }
 );
