@@ -12,7 +12,7 @@ export const getHomePageVideos = createAsyncThunk(
     } = getState();
 
     const response = await axios.get(
-      `https://youtube.googleapis.com/youtube/v3/search?maxResults=20&q="freecodecamp.org"&key=${API_KEY}&part=snippet&type=video&${
+      `https://youtube.googleapis.com/youtube/v3/search?maxResults=20&q="tenz"&key=${API_KEY}&part=snippet&type=video&${
         isNext ? `pageToken=${nextPageTokenFromState}` : ""
       }`
     );
